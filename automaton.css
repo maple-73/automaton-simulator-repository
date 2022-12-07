@@ -1,0 +1,160 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+textarea{
+    display: block;
+    resize: none;
+}
+
+header{
+    height: 80px;
+    background-color: gray;
+}
+
+.site-name{
+    padding-top: 15px;
+}
+
+/*-----------------------*/
+.main{
+    margin: auto;
+    margin-top: 0px;
+}
+
+.input-wrapper{
+    text-align: center;
+}
+
+.dfa, .nfa{
+    position: relative;
+    left: 13px;
+    padding-bottom: 20px;
+    font-size: xx-large;
+    font-weight: 500;
+}
+
+/*.first-state{
+    display: inline-block;
+}*/
+
+.first-state{
+    display: inline-block;
+    position: relative;
+    bottom: 50px;
+    left: -20px;
+}
+
+.input-first-state{
+    display: inline-block;
+}
+
+.function-table{
+    display: inline-block;
+}
+
+.state-logo{
+    position: relative;
+    left: 10px;
+}
+
+.input-sign-logo{
+    display: inline-block;
+    position: relative;
+    top: -20px;
+    width: 20px; /*「入力記号」を縦表示にするため*/
+}
+
+.accept{
+    background-color: #f17ab2;
+}
+
+.accept-color{
+    display: inline-block;
+    background-color: #f17ab2;
+    width: 15px;
+    height: 15px;
+}
+
+.active{
+    background-color: #5cff33;
+}
+
+.waiting-for-being-input{
+    background-color: #16abb6;
+}
+
+.waiting-for-being-input-color{
+    display: inline-block;
+    background-color: #16abb6;
+    width: 15px;
+    height: 15px;
+}
+
+
+.input-transition-function{
+    display: inline-block;
+    margin: auto;
+}
+
+.batch-input{
+    display: inline-block;
+    position: relative;
+    top: -20px;
+    padding: 5px;
+    display: inline-block; 
+    border: solid 2px;
+}
+
+.batch-input-button{
+    padding: 3px;
+}
+
+.batch-input-button-menu{
+    padding: 0px;
+}
+
+.tape-indicator{
+    width : 200px;
+    margin: auto;
+    /*border-collapse: collapse;*/
+}
+
+.tape-indicator-el{
+    text-align: center;
+}
+
+.input-tape{
+    margin: auto;
+}
+
+.end-marker{
+    width: 30px;
+    text-align: center;
+}
+
+.control-panel{
+    display: inline-block;
+    text-align: center;
+}
+
+.execute{
+    width: 100px;
+    margin: 15px;
+}
+
+.red{
+    background-color: red;
+}
+
+.result{
+    text-align: center;
+}
+/*input{
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+}*/
+

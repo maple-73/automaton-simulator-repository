@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--bootstrap 5.00-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <!--vue.js3-->
+    <script src="https://unpkg.com/vue@next"></script>
+    <link rel="stylesheet" href="automaton.css">
+    <title>AUTOMATON</title>
+</head>
+<body>
+    <header>
+        <h1 class="site-name">AUTOMATON CALCULATOR</h1>
+    </header>
+    <div class="main">
+        <input type="button" onclick="toggleAutomata()" value="toggle"></input>
+        <div class="input-wrapper">
+            <div class=dfa>決定性有限オートマトン</div>
+            <div class="control-panel">
+                <table border="1">
+                    <tr>
+                        <td>状態数</td><td><input type="button" onclick="addState()" value="＋"></input><input type="button" onclick="removeState()" value="ー"></input></td>
+                    </tr>
+                    <tr>
+                        <td>入力記号数</td><td><input type="button" value="＋" onclick="addSign()"></input><input type="button" value="ー" onclick="removeSign()"></input></td>
+                    </tr>
+                </table>
+                <input type="button" value="テスト入力" onclick="setTestTransitionFunctions()"></input>
+                <input type="button" class="execute" value="実行" size="5" onclick="exeDFA()">
+            </div>
+            <div class="input">
+                <div class="dropdown first-state">
+                    <!-- 切替ボタンの設定 -->
+                    初期状態 :
+                    <button type="button" class="input-first-state btn btn-secondary dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{text}}
+                    </button>
+                    <!-- ドロップメニューの設定 -->
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+                        <li><span class="dropdown-item first-state-el-0" v-on:click="setFirstState('q0')">q0</span></li>
+                        <li><span class="dropdown-item first-state-el-1" v-on:click="setFirstState('q1')">q1</span></li>
+                        <li><span class="dropdown-item first-state-el-2" v-on:click="setFirstState('q2')">q2</span></li>
+                        <li><span class="dropdown-item first-state-el-3" v-on:click="setFirstState('q3')">q3</span></li>
+                    </ul>
+                </div>
+                <div class="function-table">
+                    <div class="state-logo">
+                        <span>状態　(受理状態</span>
+                        <div class="accept-color"></div>
+                        <span>を↓からクリックして選択)</span>
+                    </div>
+                    <div class="input-sign-logo">入力記号</div>
+                    <table class="input-transition-function" border="1">
+                        <tr class="state">
+                            <td class="blank" style="width: 54px;"></td>
+                            <td class="q0 state-el" :class="{accept: isAccept}" v-on:click="toggleAccept">q0</td>
+                            <td class="q1 state-el" :class="{accept: isAccept}" v-on:click="toggleAccept">q1</td>
+                            <td class="q2 state-el" :class="{accept: isAccept}" v-on:click="toggleAccept">q2</td>
+                            <td class="q3 state-el" :class="{accept: isAccept}" v-on:click="toggleAccept">q3</td>
+                        </tr>
+                        <tr class="tr1">
+                            <td class="a input-sign">a</td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                        </tr>
+                        <tr class="tr2">
+                            <td class="b input-sign">b</td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                        </tr>
+                        <tr class="tr3">
+                            <td class="c input-sign">c</td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                        </tr>
+                        <tr class="tr4">
+                            <td class="d input-sign">d</td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                            <td><input class="transition-function" size="5" maxlength="40"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="batch-input">
+                    <div class="select-batch-input-or-not">
+                        まとめて入力
+                        <div class="batch-input-on" style="display: inline-block; border: solid 1px;">ON</div><div class="batch-input-off" style="display: inline-block; border: solid 1px;">OFF</div>
+                        <div>
+                            <span>クリックしたセル</span>
+                            <div class="waiting-for-being-input-color"></div>
+                            <span>に</span>
+                            <div class="dropdown batch-input-state">
+                                <!-- 切替ボタンの設定 -->
+                                <button type="button" class="batch-input-button btn btn-secondary dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{text}}
+                                </button>
+                                <span>を</span>
+                                <input type="button" value="入力" onclick="batchInput()"></input>
+                                <!-- ドロップメニューの設定 -->
+                                <ul class="batch-input-button-menu dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+                                    <li><span class="dropdown-item" v-on:click="setFirstState('q0')">q0</span></li>
+                                    <li><span class="dropdown-item" v-on:click="setFirstState('q1')">q1</span></li>
+                                    <li><span class="dropdown-item" v-on:click="setFirstState('q2')">q2</span></li>
+                                    <li><span class="dropdown-item" v-on:click="setFirstState('q3')">q3</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tape-info">
+            <table class="input-tape" border="1">
+                <tr class="tape-indicator">
+                    <td class="tape-indicator-el" style="height: 20px; border-collapse: separate;"></td>
+                    <td class="tape-indicator-el" style="height: 20px; border-collapse: separate;"></td>
+                    <td class="tape-indicator-el" style="height: 20px; border-collapse: separate;"></td>
+                    <td class="tape-indicator-el" style="height: 20px; border-collapse: separate;"></td>
+                    <td class="tape-indicator-el" style="height: 20px; border-collapse: separate;"></td>
+                    <td class="tape-indicator-el" style="height: 20px; border-collapse: separate;"></td>
+                </tr>
+                <tr class="input-tape">
+                    <td><input type="text" class="input-tape-el" size="5" maxlength="1"></td>
+                    <td><input type="text" class="input-tape-el" size="5" maxlength="1"></td>
+                    <td><input type="text" class="input-tape-el" size="5" maxlength="1"></td>
+                    <td><input type="text" class="input-tape-el" size="5" maxlength="1"></td>
+                    <td><input type="text" class="input-tape-el" size="5" maxlength="1"></td>
+                    <td class="end-marker">$</td>
+                </tr>
+            </table>
+        </div>
+        <div class="result"></div>
+    </div>
+</body>
+<script>
+    const firstStateVm = Vue.createApp({
+        data() {
+            return {
+                text: "選択する"
+            }
+        },
+
+        methods: {
+            setFirstState(q){
+                this.text = q
+            },
+        },
+    }).mount(".first-state")
+
+    const batchInputVm = Vue.createApp({
+        data() {
+            return {
+                text: "選択する"
+            }
+        },
+
+        methods: {
+            setFirstState(q){
+                this.text = q
+            },
+        },
+    }).mount(".batch-input-state")
+
+    /*const accept = Vue.createApp({
+        data() {
+            return {
+                isAccept: false,
+            }
+        },
+        methods: {
+            toggleAccept(){
+                if(this.isAccept == false){
+                    console.log("if");
+                    this.isAccept = true;
+                    console.log(this.isAccept);
+                }else{
+                    console.log("else");
+                    this.isAccept = false;
+                }
+            },
+        },
+    }).mount(".state")*/
+</script>
+<!--js to bootstrap-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="automaton.js"></script>
+</html>
